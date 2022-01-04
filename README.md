@@ -1,4 +1,4 @@
-# SequenceExtraction
+# CLAE
 
 This is a complete toolkit generating consensus sequence.
 
@@ -17,14 +17,11 @@ This is a complete toolkit generating consensus sequence.
 - blasr: https://github.com/PacificBiosciences/blasr
 - BLAT: http://genome.ucsc.edu/FAQ/FAQblat.html
 - BLAST: https://blast.ncbi.nlm.nih.gov/Blast.cgi
-- muscle: https://www.ebi.ac.uk/Tools/msa/muscle/
-- mugio: https://github.com/pspealman/mugio (needed if you want to use phred score to filter sequences)
 
 |          | Reference Mode | | Non-reference Mode |||
 | -------- | -------------- |--| ------------------ |--|--|
 |          | pbdagcon       | Sparc              | pbdagcon | Sparc | muscle |
 | pbdagcon | √              |                    | √ |  |  |
 | Sparc    |                | √                  |  | √ |  |
-| muscle   |                |                    |  |  | √ |
 | blasr    | √              | √                  | √ | √ |  |
 | BLAT     |                |                    |  |  | √ |
