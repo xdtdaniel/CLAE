@@ -30,7 +30,14 @@ def main():
     parser.add_argument('--algo', help='Consensus Tool Selection, s for Sparc, p for pbdagcon', type=str, required=True)
     parser.add_argument('--merge', help='Include to merge autodivided chunks. RECOMMEND TO INCLUDE', action='store_true')
 
+    
+
     args = parser.parse_args()
+    
+    blast_path = os.path.abspath(args.blast)
+    seq_path = os.path.abspath(args.seq)
+    ref_seq_path = os.path.abspath(args.refseq) if args.refseq != None else ''
+    
     
     root_dir = os.getcwd()
     
@@ -52,7 +59,7 @@ def main():
         sep = ','
 
     env_check()
-    chunks = read_blastn_and_divide(os.path.abspath(args.blast), sep)
+    chunks = read_blastn_and_divide(blast_path, sep)
 
     start = 0
     end = chunks
@@ -62,7 +69,7 @@ def main():
     if args.end is not None:
         end = args.end + 1
 
-    seqs = read_seqs(os.path.abspath(args.seq))
+    seqs = read_seqs(seq_path)
     
     pool = Pool()
 
@@ -91,9 +98,9 @@ def main():
         # Ref mode
         if args.ref:
             if 's' in args.algo:
-                pool.apply_async(consensus_finding_sparc, args=(i, os.path.abspath(args.refseq)))
+                pool.apply_async(consensus_finding_sparc, args=(i, ref_seq_path))
             if 'p' in args.algo:
-                pool.apply_async(consensus_finding_pbdagcon, args=(i, os.path.abspath(args.refseq)))
+                pool.apply_async(consensus_finding_pbdagcon, args=(i, ref_seq_path))
         # No ref mode
         else:
             if 's' in args.algo:
