@@ -190,6 +190,6 @@ def consensus_finding_pbdagcon(group_id: int, ref_file_name: str):
                 
             os.remove(file_name)
                 
-    result_df.to_csv('results/ref/Result_sparc_' + str(group_id) + '.csv')
-    print('Group ' + str(group_id) + ' Sparc ref Consensus Finding Finished.')
+    result_df.to_csv('results/ref/Result_pbdagcon_' + str(group_id) + '.csv')
+    print('Group ' + str(group_id) + ' pbdagcon ref Consensus Finding Finished.')
 

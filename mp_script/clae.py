@@ -34,14 +34,9 @@ def main():
     
     root_dir = os.getcwd()
     
-    exec_dirname = ''
-    
-    if args.historydir is not None:
-        exec_dirname = args.historydir
-    else:
-        exec_dirname = f'{args.seq}_{datetime.now().strftime("%Y%m%d-%H%M%S")}_files'
-        if not os.path.exists(exec_dirname):
-            os.makedirs(exec_dirname)
+    exec_dirname = f'{args.seq}_{datetime.now().strftime("%m%d%Y_%H%M%S")}_{args.algo}_files'
+    if not os.path.exists(exec_dirname):
+        os.makedirs(exec_dirname)
     os.chdir(exec_dirname)
     
     logging.basicConfig(filename='consensus.log', level=logging.DEBUG)
@@ -116,7 +111,7 @@ def main():
     
     
     if args.merge:
-        merge(start, end, args.ref, args.algo, args.seq, args.runlseq)
+        merge(start, end, args.ref, args.algo, args.seq, False)
         
     t1_stop = time.perf_counter()
     t2_stop = time.process_time()
@@ -130,6 +125,9 @@ def main():
     # Clean-up temp files
     if os.path.isdir('temp_df'):
         shutil.rmtree('temp_df')
+        
+    if os.path.isdir('blastn'):
+        shutil.rmtree('blastn')
 
     logging.info('Done.')
     logging.info("--------------------------------------------------")

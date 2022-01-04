@@ -4,7 +4,6 @@ import os
 import threading
 from tqdm import tqdm
 import sys
-from Threshold_Consensus import muscle_generation
 
 
 def no_ref_consensus_finding_sparc(group_id: int):
@@ -226,68 +225,3 @@ def no_ref_consensus_finding_pbdagcon(group_id: int):
     pb_result_df.to_csv('results/no_ref/Result_pbdagcon_' + str(group_id) + '.csv')
     print('Group ' + str(group_id) + ' no ref pbdagcon Consensus Finding Finished.')
 
-
-def no_ref_consensus_finding_chris(group_id: int):
-    try:
-        df_seq_extract = pd.read_csv('temp_df/df_w_seqs_' + str(group_id) + '.csv')
-    except FileNotFoundError:
-        df_seq_extract = pd.read_csv('temp_df/df_w_seqs_no_blat_' + str(group_id) + '.csv')
-    unique_id = np.unique(df_seq_extract['qseqid'])
-    result_df = pd.DataFrame()
-    dummy_counter = 0
-
-    for seqid in tqdm(unique_id):
-        temp = df_seq_extract[df_seq_extract['qseqid'] == seqid]
-
-        if temp.shape[0] > 0:
-
-            file_name = str(seqid) + '.fasta'
-            f = open(file_name, mode='w+')
-            depth = temp.shape[0]
-
-            """
-            
-            if temp.shape[0] > 70:
-                temp = temp.loc[list(temp['corr_seq'].apply(len).sort_values(ascending=True).iloc[:70].index)]
-                
-            """
-
-            for index, row in temp.iterrows():
-                seq = row['corr_seq']
-                f.write(">" + str(seqid) + '\n')
-                f.write(str(seq) + '\n')
-            f.close()
-
-            if depth == 1:
-                result_df.at[dummy_counter, 'qseqid'] = seqid
-                result_df.at[dummy_counter, 'depth'] = depth
-                result_df.at[dummy_counter, 'seq'] = seq
-
-                dummy_counter += 1
-
-                os.remove(file_name)
-            elif depth == 0:
-                os.remove(file_name)
-            else:
-                muscle_generation(file_name)
-                consensus_file = open("Consensus_No_Dashes_" + file_name, mode='r')
-                lines = consensus_file.readlines()
-                if len(lines) == 1:
-                    seq = lines[0]
-                else:
-                    seq = lines[1]
-                consensus_file.close()
-                result_df.at[dummy_counter, 'qseqid'] = seqid
-                result_df.at[dummy_counter, 'depth'] = depth
-                result_df.at[dummy_counter, 'seq'] = seq
-
-                dummy_counter += 1
-
-                os.remove(file_name)
-                os.remove("Consensus_No_Dashes_" + file_name)
-                os.remove("Consensus_" + file_name)
-                os.remove("MSA_Consensus_" + file_name)
-                # os.rename("MSA_Consensus_" + file_name, "MSA/MSA_Consensus_" + file_name)
-
-    result_df.to_csv('results/no_ref/Result_chris_' + str(group_id) + '.csv')
-    print('Group ' + str(group_id) + ' no ref Chris Consensus Finding Finished.')
