@@ -34,7 +34,7 @@ def main():
     
     root_dir = os.getcwd()
     
-    exec_dirname = f'{args.seq}_{datetime.now().strftime("%m%d%Y_%H%M%S")}_{args.algo}_files'
+    exec_dirname = f'{os.path.basename(args.seq)}_{datetime.now().strftime("%m%d%Y_%H%M%S")}_{args.algo}_files'
     if not os.path.exists(exec_dirname):
         os.makedirs(exec_dirname)
     os.chdir(exec_dirname)
@@ -52,7 +52,7 @@ def main():
         sep = ','
 
     env_check()
-    chunks = read_blastn_and_divide(os.path.join(root_dir, args.blast), sep)
+    chunks = read_blastn_and_divide(os.path.abspath(args.blast), sep)
 
     start = 0
     end = chunks
@@ -62,7 +62,7 @@ def main():
     if args.end is not None:
         end = args.end + 1
 
-    seqs = read_seqs(os.path.join(root_dir, args.seq))
+    seqs = read_seqs(os.path.abspath(args.seq))
     
     pool = Pool()
 
@@ -91,9 +91,9 @@ def main():
         # Ref mode
         if args.ref:
             if 's' in args.algo:
-                pool.apply_async(consensus_finding_sparc, args=(i, os.path.join(root_dir, args.refseq)))
+                pool.apply_async(consensus_finding_sparc, args=(i, os.path.abspath(args.refseq)))
             if 'p' in args.algo:
-                pool.apply_async(consensus_finding_pbdagcon, args=(i, os.path.join(root_dir, args.refseq)))
+                pool.apply_async(consensus_finding_pbdagcon, args=(i, os.path.abspath(args.refseq)))
         # No ref mode
         else:
             if 's' in args.algo:
@@ -111,7 +111,7 @@ def main():
     
     
     if args.merge:
-        merge(start, end, args.ref, args.algo, args.seq, False)
+        merge(start, end, args.ref, args.algo, os.path.basename(args.seq), False)
         
     t1_stop = time.perf_counter()
     t2_stop = time.process_time()
