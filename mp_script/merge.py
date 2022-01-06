@@ -12,7 +12,26 @@ def merge(start: int, end: int, ref: bool, consensus_mode: str, fasta_src_name: 
         fasta_name = 'results/no_ref/fasta/consensus_no_ref_' + consensus_mode + '_' + today + '_' + fasta_src_name
         fasta = open(fasta_name, mode='w+')
     
+    # Merging subreads
+    
     file_prior = ''
+    
+    if os.path.exists('temp_df/df_w_seqs_no_blat_0.csv'):
+        file_prior = 'temp_df/df_w_seqs_no_blat_'
+    elif os.path.exists('temp_df/df_w_seqs_0.csv''):
+        file_prior = 'temp_df/df_w_seqs_'
+    else:
+        print('merging error.')
+        
+    total = pd.DataFrame()
+    for i in range(start, end):
+        total = pd.concat([total, pd.read_csv(file_prior + str(i) + '.csv').drop('Unnamed: 0', axis=1)])
+    total.to_csv('results/subreads_' + str(start) + '_' + str(end) + '_' + fasta_src_name + '.csv')
+    
+    # Merging consensus results
+    
+    file_prior = ''
+    
     if ref:
         if consensus_mode == 's':
             file_prior = 'results/ref/Result_sparc_'

@@ -18,26 +18,24 @@ def main():
     
     
     
-    parser = argparse.ArgumentParser('Subread Extractor and Consensus Sequence Generator')
-    parser.add_argument('--blast', type=str, help='Blast File Name .csv: ', required=True)
-    parser.add_argument('--comma', help='Include to use comma (,) seperated blast result instead of tab seperated blast', action='store_true')
-    parser.add_argument('--seq', help='RCA reads input file name', type=str, required=True)
-    parser.add_argument('--llen', help='Specify Llen', type=int, default=160)
-    parser.add_argument('--ref', help='Include to use reference mode', action='store_true')
-    parser.add_argument('--start', help='Start Chunk ID, inclusive, for debugging purposes', type=int)
-    parser.add_argument('--end', help='End Chunk ID, inclusive, for debugging purposes', type=int)
-    parser.add_argument('--refseq', help='Ref Sequence Filename', type=str, required='--ref' in sys.argv)
-    parser.add_argument('--algo', help='Consensus Tool Selection, s for Sparc, p for pbdagcon', type=str, required=True)
-    parser.add_argument('--merge', help='Include to merge autodivided chunks. RECOMMEND TO INCLUDE', action='store_true')
-
-    
+    parser = argparse.ArgumentParser('Subread Extractor and Consensus Sequence Generator\n Sample command python clae.py --blast blast_result.csv --seq RCAReads.fasta --algo s --ref --refseq Lamdba_NEB.fasta --merge')
+    parser.add_argument('--blast', type=str, help='[required] File Name .csv: ', required=True)
+    parser.add_argument('--seq', help='[required] RCA reads input file name', type=str, required=True)
+    parser.add_argument('--algo', help='[required] Consensus Tool Selection, s for Sparc, p for pbdagcon', type=str, required=True)
+    parser.add_argument('--ref', help='[optional] Required to run reference mode. Include to use reference mode', action='store_true')
+    parser.add_argument('--refseq', help='[optional] Required to run reference mode. Reference Sequence Filename', type=str, required='--ref' in sys.argv)
+    parser.add_argument('--merge', help='[optional] Include to merge autodivided chunks. RECOMMEND TO INCLUDE', action='store_true')
+    parser.add_argument('--llen', help='[optional] Specify Llen', type=int, default=160)
+    parser.add_argument('--start', help='[optional] Start Chunk ID, inclusive, for debugging purposes', type=int)
+    parser.add_argument('--end', help='[optional] End Chunk ID, inclusive, for debugging purposes', type=int)
+    parser.add_argument('--comma', help='[optional] Include to use comma (,) seperated blast result instead of tab seperated blast', action='store_true')
+    parser.add_argument('--merge', help='[optional] Include to merge autodivided chunks. RECOMMEND TO INCLUDE', action='store_true')
 
     args = parser.parse_args()
     
     blast_path = os.path.abspath(args.blast)
     seq_path = os.path.abspath(args.seq)
     ref_seq_path = os.path.abspath(args.refseq) if args.refseq != None else ''
-    
     
     root_dir = os.getcwd()
     
