@@ -18,7 +18,7 @@ def merge(start: int, end: int, ref: bool, consensus_mode: str, fasta_src_name: 
     
     if os.path.exists('temp_df/df_w_seqs_no_blat_0.csv'):
         file_prior = 'temp_df/df_w_seqs_no_blat_'
-    elif os.path.exists('temp_df/df_w_seqs_0.csv''):
+    elif os.path.exists('temp_df/df_w_seqs_0.csv'):
         file_prior = 'temp_df/df_w_seqs_'
     else:
         print('merging error.')
