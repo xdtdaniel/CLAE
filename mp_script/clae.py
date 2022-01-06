@@ -29,7 +29,6 @@ def main():
     parser.add_argument('--start', help='[optional] Start Chunk ID, inclusive, for debugging purposes', type=int)
     parser.add_argument('--end', help='[optional] End Chunk ID, inclusive, for debugging purposes', type=int)
     parser.add_argument('--comma', help='[optional] Include to use comma (,) seperated blast result instead of tab seperated blast', action='store_true')
-    parser.add_argument('--merge', help='[optional] Include to merge autodivided chunks. RECOMMEND TO INCLUDE', action='store_true')
 
     args = parser.parse_args()
     
